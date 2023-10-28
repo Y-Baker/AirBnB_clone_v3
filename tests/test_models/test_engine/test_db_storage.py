@@ -94,8 +94,9 @@ class TestDbStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         """Test that count properly work"""
-       
-    @classmethod    
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @classmethod
     def setUpClass(cls):
         cls.storage = DBStorage()
         cls.storage.reload()
@@ -112,10 +113,7 @@ class TestDbStorage(unittest.TestCase):
             }
         )
         cls.user.save()
-        
 
-
-        
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_getById_Success(self):
         """
@@ -129,7 +127,6 @@ class TestDbStorage(unittest.TestCase):
         self.assertEqual(fetchedUser.first_name, "free")
         self.assertEqual(fetchedUser.last_name, "palestine")
 
-
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_getById_Null_cls(self):
         """
@@ -142,7 +139,7 @@ class TestDbStorage(unittest.TestCase):
         self.assertEqual(fetchedUser.password, "pass")
         self.assertEqual(fetchedUser.first_name, "free")
         self.assertEqual(fetchedUser.last_name, "palestine")
-        
+
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_getById_String_cls(self):
         """
@@ -166,7 +163,6 @@ class TestDbStorage(unittest.TestCase):
         fetchedUser = self.storage.get("User", None)
         self.assertIsNone(fetchedUser)
 
-
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_getById_String_cls_IdNotInDB(self):
         """
@@ -176,7 +172,7 @@ class TestDbStorage(unittest.TestCase):
 
         fetchedUser = self.storage.get("User", "not in db")
         self.assertIsNone(fetchedUser)
-        
+
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_getById_BothNone(self):
         """
@@ -207,7 +203,7 @@ class TestDbStorage(unittest.TestCase):
         self.storage.reload()
         new_count = self.storage.count(User)
         self.assertEqual(new_count, oldCount + 1)
-        
+
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_Count_ClsNone(self):
         """

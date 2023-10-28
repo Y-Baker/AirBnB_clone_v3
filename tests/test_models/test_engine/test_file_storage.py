@@ -30,7 +30,6 @@ class TestFileStorageDocs(unittest.TestCase):
         """Set up for the doc tests"""
         cls.fs_f = inspect.getmembers(FileStorage, inspect.isfunction)
 
-
 #     def test_pep8_conformance_file_storage(self):
 #         """Test that models/engine/file_storage.py conforms to PEP8."""
 #         pep8s = pep8.StyleGuide(quiet=True)
@@ -117,12 +116,13 @@ class TestFileStorage(unittest.TestCase):
 
     def setUp(self):
         """Set up for the tests"""
-        print('setup method')
         self.user = User(
             **{
                 "id": "1002",
                 "created_at": datetime.utcnow(),
                 "updated_at": datetime.utcnow(),
+                "email": "free.palestine@email",
+                "password": "pass",
             }
         )
         self.storage = FileStorage()
@@ -131,7 +131,7 @@ class TestFileStorage(unittest.TestCase):
     def tearDown(self):
         """tearDown for the tests"""
         self.base1 = None
-        
+
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_getById_Success(self):
         """
@@ -151,7 +151,7 @@ class TestFileStorage(unittest.TestCase):
 
         fetchedUser = self.storage.get(None, "1002")
         self.assertEqual(fetchedUser.created_at, self.user.created_at)
-        
+
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_getById_String_cls(self):
         """
@@ -172,7 +172,6 @@ class TestFileStorage(unittest.TestCase):
         fetchedUser = self.storage.get("User", None)
         self.assertIsNone(fetchedUser)
 
-
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_getById_String_cls_IdNotInDB(self):
         """
@@ -182,7 +181,7 @@ class TestFileStorage(unittest.TestCase):
 
         fetchedUser = self.storage.get("User", "not in db")
         self.assertIsNone(fetchedUser)
-        
+
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_getById_BothNone(self):
         """
@@ -201,7 +200,7 @@ class TestFileStorage(unittest.TestCase):
         new_user.save()
         new_count = self.storage.count(User)
         self.assertEqual(new_count, oldCount + 1)
-        
+
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_Count_ClsNone(self):
         """
