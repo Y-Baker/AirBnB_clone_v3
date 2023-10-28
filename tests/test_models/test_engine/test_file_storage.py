@@ -23,37 +23,6 @@ classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
 
 
-class TestFileStorage(unittest.TestCase):
-    """Tests to check the documentation and style of FileStorage class"""
-
-    @classmethod
-    def setUpClass(cls):
-        """Set up for the tests"""
-        print("setup all class")
-        
-    def setUp(self):
-        """Set up for the tests"""
-        print('setup method')
-        self.base1 = BaseModel(
-            **{
-                "id": "1002",
-                "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow(),
-            }
-        )
-
-    def tearDown(self):
-        """tearDown for the tests"""
-        self.base1 = None
-
-    def test_instance(self):
-        """
-        Test instantiation
-        """
-        print("is instatnce ? ")
-        self.assertEqual("1002", self.base1.id)
-
-
 class TestFileStorageDocs(unittest.TestCase):
     """Tests to check the documentation and style of FileStorage class"""
     @classmethod
@@ -145,3 +114,112 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    def setUp(self):
+        """Set up for the tests"""
+        print('setup method')
+        self.user = User(
+            **{
+                "id": "1002",
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow(),
+            }
+        )
+        self.storage = FileStorage()
+        self.user.save()
+
+    def tearDown(self):
+        """tearDown for the tests"""
+        self.base1 = None
+        
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_getById_Success(self):
+        """
+        Test instantiation
+        """
+        self.assertEqual("1002", self.user.id)
+
+        fetchedUser = self.storage.get(User, "1002")
+        self.assertEqual(fetchedUser.created_at, self.user.created_at)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_getById_Null_cls(self):
+        """
+        Test instantiation
+        """
+        self.assertEqual("1002", self.user.id)
+
+        fetchedUser = self.storage.get(None, "1002")
+        self.assertEqual(fetchedUser.created_at, self.user.created_at)
+        
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_getById_String_cls(self):
+        """
+        Test instantiation
+        """
+        self.assertEqual("1002", self.user.id)
+
+        fetchedUser = self.storage.get("User", "1002")
+        self.assertEqual(fetchedUser.created_at, self.user.created_at)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_getById_String_cls_NoneId(self):
+        """
+        Test instantiation
+        """
+        self.assertEqual("1002", self.user.id)
+
+        fetchedUser = self.storage.get("User", None)
+        self.assertIsNone(fetchedUser)
+
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_getById_String_cls_IdNotInDB(self):
+        """
+        Test instantiation
+        """
+        self.assertEqual("1002", self.user.id)
+
+        fetchedUser = self.storage.get("User", "not in db")
+        self.assertIsNone(fetchedUser)
+        
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_getById_BothNone(self):
+        """
+        Test instantiation
+        """
+        fetchedUser = self.storage.get(None, None)
+        self.assertIsNone(fetchedUser)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_Count_Success(self):
+        """
+        Test instantiation
+        """
+        oldCount = self.storage.count(User)
+        new_user = User()
+        new_user.save()
+        new_count = self.storage.count(User)
+        self.assertEqual(new_count, oldCount + 1)
+        
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_Count_ClsNone(self):
+        """
+        Test instantiation
+        """
+
+        oldCount = self.storage.count(None)
+        new_user = User()
+        new_user.save()
+        new_count = self.storage.count(None)
+        self.assertEqual(new_count, oldCount + 1)
+
+    def test_Count_ClsStr(self):
+        """
+        Test instantiation
+        """
+        oldCount = self.storage.count("User")
+        new_user = User()
+        new_user.save()
+        new_count = self.storage.count("User")
+        self.assertEqual(new_count, oldCount + 1)

@@ -12,7 +12,7 @@ pip3 install SQLAlchemy
 
 pip3 uninstall Fabric
 sudo apt-get install libffi-dev
-sudo apt-get install libssl-dev
+sudo apt-get install libssl-dev -y
 sudo apt-get install build-essential
 sudo apt-get install python3.4-dev
 sudo apt-get install libpython3-dev
