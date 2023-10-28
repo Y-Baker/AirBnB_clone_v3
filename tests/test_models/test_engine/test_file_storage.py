@@ -30,7 +30,7 @@ class TestFileStorage(unittest.TestCase):
     def setUpClass(cls):
         """Set up for the tests"""
         print("setup all class")
-        
+
     def setUp(self):
         """Set up for the tests"""
         print('setup method')
