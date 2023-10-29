@@ -67,7 +67,7 @@ def update_user(user_id):
         abort(400, 'Not a JSON')
 
     dc = {k: v for k, v in data.items()
-          if k not in ['id', 'updated_at', 'created_at']}
+          if k not in ['id', 'email', 'created_at', 'updated_at']}
     user_dict = user.to_dict()
     user_dict.update(dc)
     user.save()
