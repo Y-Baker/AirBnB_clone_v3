@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""new view for user resource"""
+"""new view for user resource for all common rest API"""
+
 from models.user import User
 from api.v1.views import app_views
 from flask import jsonify, abort, request
