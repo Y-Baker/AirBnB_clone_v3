@@ -16,7 +16,7 @@ from models.state import State
 from models.user import User
 import json
 import os
-# import pep8
+import pep8
 import unittest
 DBStorage = db_storage.DBStorage
 classes = {"Amenity": Amenity, "City": City, "Place": Place,
@@ -30,20 +30,20 @@ class TestDBStorageDocs(unittest.TestCase):
         """Set up for the doc tests"""
         cls.dbs_f = inspect.getmembers(DBStorage, inspect.isfunction)
 
-#     def test_pep8_conformance_db_storage(self):
-#         """Test that models/engine/db_storage.py conforms to PEP8."""
-#         pep8s = pep8.StyleGuide(quiet=True)
-#         result = pep8s.check_files(['models/engine/db_storage.py'])
-#         self.assertEqual(result.total_errors, 0,
-#                          "Found code style errors (and warnings).")
-#
-#     def test_pep8_conformance_test_db_storage(self):
-#         """Test tests/test_models/test_db_storage.py conforms to PEP8."""
-#         pep8s = pep8.StyleGuide(quiet=True)
-#         result = pep8s.check_files(['tests/test_models/test_engine/\
-# test_db_storage.py'])
-#         self.assertEqual(result.total_errors, 0,
-#                          "Found code style errors (and warnings).")
+    def test_pep8_conformance_db_storage(self):
+        """Test that models/engine/db_storage.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['models/engine/db_storage.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_conformance_test_db_storage(self):
+        """Test tests/test_models/test_db_storage.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['tests/test_models/test_engine/\
+test_db_storage.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
 
     def test_db_storage_module_docstring(self):
         """Test for the db_storage.py module docstring"""
@@ -94,8 +94,8 @@ class TestDbStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         """Test that count properly work"""
-       
-    @classmethod    
+
+    @classmethod
     def setUpClass(cls):
         cls.storage = DBStorage()
         cls.storage.reload()
@@ -112,10 +112,7 @@ class TestDbStorage(unittest.TestCase):
             }
         )
         cls.user.save()
-        
 
-
-        
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_getById_Success(self):
         """
@@ -129,7 +126,6 @@ class TestDbStorage(unittest.TestCase):
         self.assertEqual(fetchedUser.first_name, "free")
         self.assertEqual(fetchedUser.last_name, "palestine")
 
-
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_getById_Null_cls(self):
         """
@@ -142,7 +138,7 @@ class TestDbStorage(unittest.TestCase):
         self.assertEqual(fetchedUser.password, "pass")
         self.assertEqual(fetchedUser.first_name, "free")
         self.assertEqual(fetchedUser.last_name, "palestine")
-        
+
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_getById_String_cls(self):
         """
@@ -166,7 +162,6 @@ class TestDbStorage(unittest.TestCase):
         fetchedUser = self.storage.get("User", None)
         self.assertIsNone(fetchedUser)
 
-
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_getById_String_cls_IdNotInDB(self):
         """
@@ -176,7 +171,7 @@ class TestDbStorage(unittest.TestCase):
 
         fetchedUser = self.storage.get("User", "not in db")
         self.assertIsNone(fetchedUser)
-        
+
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_getById_BothNone(self):
         """
@@ -207,7 +202,7 @@ class TestDbStorage(unittest.TestCase):
         self.storage.reload()
         new_count = self.storage.count(User)
         self.assertEqual(new_count, oldCount + 1)
-        
+
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_Count_ClsNone(self):
         """

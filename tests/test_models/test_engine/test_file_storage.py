@@ -17,6 +17,7 @@ from models.user import User
 from datetime import datetime
 import json
 import os
+import pep8
 import unittest
 FileStorage = file_storage.FileStorage
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
@@ -30,21 +31,20 @@ class TestFileStorageDocs(unittest.TestCase):
         """Set up for the doc tests"""
         cls.fs_f = inspect.getmembers(FileStorage, inspect.isfunction)
 
+    def test_pep8_conformance_file_storage(self):
+        """Test that models/engine/file_storage.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['models/engine/file_storage.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
 
-#     def test_pep8_conformance_file_storage(self):
-#         """Test that models/engine/file_storage.py conforms to PEP8."""
-#         pep8s = pep8.StyleGuide(quiet=True)
-#         result = pep8s.check_files(['models/engine/file_storage.py'])
-#         self.assertEqual(result.total_errors, 0,
-#                          "Found code style errors (and warnings).")
-#
-#     def test_pep8_conformance_test_file_storage(self):
-#         """Test tests/test_models/test_file_storage.py conforms to PEP8."""
-#         pep8s = pep8.StyleGuide(quiet=True)
-#         result = pep8s.check_files(['tests/test_models/test_engine/\
-# test_file_storage.py'])
-#         self.assertEqual(result.total_errors, 0,
-#                          "Found code style errors (and warnings).")
+    def test_pep8_conformance_test_file_storage(self):
+        """Test tests/test_models/test_file_storage.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['tests/test_models/test_engine/\
+test_file_storage.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
 
     def test_file_storage_module_docstring(self):
         """Test for the file_storage.py module docstring"""
@@ -131,7 +131,7 @@ class TestFileStorage(unittest.TestCase):
     def tearDown(self):
         """tearDown for the tests"""
         self.base1 = None
-        
+
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_getById_Success(self):
         """
@@ -151,7 +151,7 @@ class TestFileStorage(unittest.TestCase):
 
         fetchedUser = self.storage.get(None, "1002")
         self.assertEqual(fetchedUser.created_at, self.user.created_at)
-        
+
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_getById_String_cls(self):
         """
@@ -172,7 +172,6 @@ class TestFileStorage(unittest.TestCase):
         fetchedUser = self.storage.get("User", None)
         self.assertIsNone(fetchedUser)
 
-
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_getById_String_cls_IdNotInDB(self):
         """
@@ -182,7 +181,7 @@ class TestFileStorage(unittest.TestCase):
 
         fetchedUser = self.storage.get("User", "not in db")
         self.assertIsNone(fetchedUser)
-        
+
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_getById_BothNone(self):
         """
@@ -201,7 +200,7 @@ class TestFileStorage(unittest.TestCase):
         new_user.save()
         new_count = self.storage.count(User)
         self.assertEqual(new_count, oldCount + 1)
-        
+
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_Count_ClsNone(self):
         """
@@ -214,6 +213,7 @@ class TestFileStorage(unittest.TestCase):
         new_count = self.storage.count(None)
         self.assertEqual(new_count, oldCount + 1)
 
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_Count_ClsStr(self):
         """
         Test instantiation
