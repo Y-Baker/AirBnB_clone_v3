@@ -95,6 +95,7 @@ class TestDbStorage(unittest.TestCase):
     def test_count(self):
         """Test that count properly work"""
 
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     @classmethod
     def setUpClass(cls):
         cls.storage = DBStorage()
