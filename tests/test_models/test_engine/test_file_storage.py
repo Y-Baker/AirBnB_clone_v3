@@ -117,12 +117,13 @@ class TestFileStorage(unittest.TestCase):
 
     def setUp(self):
         """Set up for the tests"""
-        print('setup method')
         self.user = User(
             **{
                 "id": "1002",
                 "created_at": datetime.utcnow(),
                 "updated_at": datetime.utcnow(),
+                "email": "free.palestine@email",
+                "password": "pass",
             }
         )
         self.storage = FileStorage()
