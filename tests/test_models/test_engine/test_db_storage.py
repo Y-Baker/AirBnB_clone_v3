@@ -190,7 +190,7 @@ class TestDbStorage(unittest.TestCase):
         created = datetime.utcnow()
         new_user = User(
             **{
-                "id": "1005",
+                "id": "786786786",
                 "created_at": created,
                 "updated_at": created,
                 "email": "email@email",
@@ -214,7 +214,7 @@ class TestDbStorage(unittest.TestCase):
         created = datetime.utcnow()
         new_user = User(
             **{
-                "id": "1006",
+                "id": "786786",
                 "created_at": created,
                 "updated_at": created,
                 "email": "email@email",
@@ -236,7 +236,7 @@ class TestDbStorage(unittest.TestCase):
         created = datetime.utcnow()
         new_user = User(
             **{
-                "id": "1007",
+                "id": "785786",
                 "created_at": created,
                 "updated_at": created,
                 "email": "email@email",

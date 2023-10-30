@@ -90,4 +90,4 @@ class DBStorage:
 
     def get_places_by_city_id(self, city_id):
         """method to reterive places by city id"""
-        return self.__session.query(Place).filter_by(city_id = city_id).all()
+        return self.__session.query(Place).filter_by(city_id=city_id).all()
