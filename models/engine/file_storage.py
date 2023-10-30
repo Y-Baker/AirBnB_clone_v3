@@ -84,4 +84,5 @@ class FileStorage:
 
     def get_places_by_city_id(self, city_id):
         """method to reterive places by city id"""
-        return list(filter(lambda place: place.city_id == city_id, self.all(Place)))
+        return list(filter(lambda place: place.city_id == city_id,
+                           self.all(Place)))
