@@ -12,8 +12,10 @@ from models.user import User
                  methods=['GET'], strict_slashes=False)
 def get_places(city_id):
     """list all places in a city in storage"""
+    places = list(filter(lambda place: place.city_id == city_id,
+                         storage.all(Place).values()))
     return jsonify(list(map(lambda place: place.to_dict(),
-                            storage.get_places_by_city_id(city_id))))
+                            places)))
 
 
 @app_views.route('/places/<place_id>',
