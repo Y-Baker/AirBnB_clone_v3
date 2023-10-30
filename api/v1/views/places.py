@@ -13,10 +13,12 @@ from models.user import User
                  methods=['GET'], strict_slashes=False)
 def get_places(city_id):
     """list all places in a city in storage"""
-    places = list(filter(lambda place: place.city_id == city_id,
-                         storage.all(Place).values()))
-    return jsonify(list(map(lambda place: place.to_dict(),
-                            places)))
+    city = storage.get(City, city_id)
+    if city is None:
+        abort(404)
+    places_list = [place.to_dict() for place in city.places]
+
+    return jsonify(places_list)
 
 
 @app_views.route('/places/<place_id>',
