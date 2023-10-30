@@ -87,3 +87,7 @@ class DBStorage:
         """A method to count the number of objects in storage"""
         objects = self.all(cls)
         return len(objects)
+
+    def get_places_by_city_id(self, city_id):
+        """method to reterive places by city id"""
+        return self.__session.query(Place).filter_by(city_id = city_id).all()
