@@ -4,8 +4,10 @@
 from api.v1.views import app_views
 from flask import jsonify, abort, request
 from models import storage
+from models.amenity import Amenity
 from models.city import City
 from models.place import Place
+from models.state import State
 from models.user import User
 
 
@@ -81,3 +83,40 @@ def update_place(place_id):
 
     place.save()
     return jsonify(place.to_dict()), 200
+
+@app_views.route('/places_search', methods=['POST'], strict_slashes=False)
+def search_place():
+    """retrieves all Place objects depending of the JSON request"""
+    data = request.get_json()
+    if not data:
+        abort(400, 'Not a JSON')
+    states = [storage.get(State, id) for id in data.get('states', [])]
+    cities = [storage.get(City, id) for id in data.get('cities', [])]
+    amenities = [storage.get(Amenity, id) for id in data.get('amenities', [])]
+
+    if data == {} or (states == [] and cities == [] and amenities == []):
+        places = storage.all(Place).values()
+        if places is None:
+            places_list = []
+        else:
+            places_list = [place.to_dict() for place in places]
+        return jsonify(places_list)
+
+    cities_search = []
+    if states != []:
+        for state in states:
+            cities_search.extend(state.cities)
+    if cities != []:
+        for city in cities:
+            cities_search.append(city)
+
+    places = []
+    for city in cities_search:
+        places.extend([place for place in city.places])
+
+    if amenities != []:
+        for place in places:
+            if amenities not in place.amenities:
+                places.remove(place)
+
+    return jsonify([place.to_dict() for place in places])
