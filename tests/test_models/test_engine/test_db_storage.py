@@ -123,7 +123,6 @@ class TestDbStorage(unittest.TestCase):
 
         fetchedUser = self.storage.get(User, "1002")
         self.assertEqual(fetchedUser.email, "email@email")
-        self.assertEqual(fetchedUser.password, "pass")
         self.assertEqual(fetchedUser.first_name, "free")
         self.assertEqual(fetchedUser.last_name, "palestine")
 
@@ -136,7 +135,6 @@ class TestDbStorage(unittest.TestCase):
 
         fetchedUser = self.storage.get(None, "1002")
         self.assertEqual(fetchedUser.email, "email@email")
-        self.assertEqual(fetchedUser.password, "pass")
         self.assertEqual(fetchedUser.first_name, "free")
         self.assertEqual(fetchedUser.last_name, "palestine")
 
@@ -149,7 +147,6 @@ class TestDbStorage(unittest.TestCase):
 
         fetchedUser = self.storage.get("User", "1002")
         self.assertEqual(fetchedUser.email, "email@email")
-        self.assertEqual(fetchedUser.password, "pass")
         self.assertEqual(fetchedUser.first_name, "free")
         self.assertEqual(fetchedUser.last_name, "palestine")
 

@@ -29,7 +29,7 @@ class User(BaseModel, Base):
     def __init__(self, *args, **kwargs):
         """initializes user"""
         super().__init__(*args, **kwargs)
-    
+
     def __setattr__(self, key: str, val) -> None:
         '''The most important one
         Sets an attribute of this class to a given value'''
@@ -46,7 +46,7 @@ class User(BaseModel, Base):
         """updates user with another dict"""
         for key, value in other_dict.items():
             if key == 'password' and not is_valid_hash(value):
-                    value = md5(value.encode()).hexdigest()
+                value = md5(value.encode()).hexdigest()
             else:
                 setattr(self, key, value)
 
@@ -56,7 +56,7 @@ class User(BaseModel, Base):
             value = md5(value.encode()).hexdigest()
         else:
             setattr(self, key, value)
-            
+
 
 def is_valid_hash(password):
     """Check if the string appears to be an MD5 hash"""
