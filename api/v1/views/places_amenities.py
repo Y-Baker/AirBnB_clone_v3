@@ -3,7 +3,7 @@
 
 from api.v1.views import app_views
 from flask import jsonify, abort
-from models import storage
+from models import storage, storage_t
 from models.place import Place
 from models.amenity import Amenity
 from os import getenv
@@ -28,24 +28,35 @@ def delete_amenity_in_place(place_id, amenity_id):
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
-    storage_t = getenv('HBNB_TYPE_STORAGE')
+    amenity = storage.get(Amenity, amenity_id)
+    if amenity is None:
+        abort(404)
+    place_amenities = place.amenities
+    if amenity not in place_amenities:
+        abort(404)
     if storage_t == 'db':
-        for one in place.amenities:
-            if one.id == amenity_id:
-                amenity = one
-                break
-        if not amenity:
-            abort(404)
-        storage.delete(amenity)
+        place.amenities.remove(amenity)
     else:
-        if amenity_id in place.amenity_ids:
-            amenity = storage.get(Amenity, amenity_id)
-            storage.delete(amenity)
-            place.amenity_ids.remove(amenity_id)
-        else:
-            abort(404)
+        place.amenity_ids.remove(amenity_id)
+    place.save()
 
-    storage.save()
+    # storage_t = getenv('HBNB_TYPE_STORAGE')
+    # if storage_t == 'db':
+    #     for one in place.amenities:
+    #         if one.id == amenity_id:
+    #             amenity = one
+    #             break
+    #     if not amenity:
+    #         abort(404)
+    #     storage.delete(amenity)
+    # else:
+    #     if amenity_id in place.amenity_ids:
+    #         amenity = storage.get(Amenity, amenity_id)
+    #         storage.delete(amenity)
+    #         place.amenity_ids.remove(amenity_id)
+    #     else:
+    #         abort(404)
+    # storage.save()
     return jsonify({})
 
 
@@ -59,7 +70,6 @@ def add_amenity_to_place(place_id, amenity_id):
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
-    storage_t = getenv('HBNB_TYPE_STORAGE')
     if storage_t == 'db':
         if amenity in place.amenities:
             return jsonify(amenity.to_dict()), 200
@@ -68,6 +78,5 @@ def add_amenity_to_place(place_id, amenity_id):
         if amenity_id in place.amenity_ids:
             return jsonify(amenity.to_dict()), 200
         place.amenity_ids.append(amenity_id)
-
-    storage.save()
+    place.save()
     return jsonify(amenity.to_dict()), 201
