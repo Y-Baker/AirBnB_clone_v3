@@ -158,3 +158,45 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(old_created_at, new_created_at)
         self.assertTrue(mock_storage.new.called)
         self.assertTrue(mock_storage.save.called)
+
+    def test_hashPass(self):
+        """test hashed password
+        """
+        from models.user import User
+        from hashlib import md5
+        created = datetime.utcnow()
+        password = 'pass'
+        new_user = User(
+            **{
+                "id": "786786",
+                "created_at": created,
+                "updated_at": created,
+                "email": "email@email",
+                "password": password,
+                "first_name": "free",
+                "last_name": "palestine",
+            }
+        )
+        hashed = md5(password.encode()).hexdigest()
+        self.assertEqual(hashed, new_user.password)
+
+    def test_hashPass_in_update(self):
+        """test hashed password
+        """
+        from models.user import User
+        from hashlib import md5
+        created = datetime.utcnow()
+        password = 'pass'
+        new_user = User(
+            **{
+                "id": "786786",
+                "created_at": created,
+                "updated_at": created,
+                "email": "email@email",
+                "first_name": "free",
+                "last_name": "palestine",
+            }
+        )
+        new_user.password = password
+        hashed = md5(password.encode()).hexdigest()
+        self.assertEqual(hashed, new_user.password)

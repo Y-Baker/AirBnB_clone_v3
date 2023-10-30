@@ -4,12 +4,14 @@ Contains class BaseModel
 """
 
 from datetime import datetime
+import re
 import models
 from os import getenv
 import sqlalchemy
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 import uuid
+from hashlib import md5
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -31,6 +33,8 @@ class BaseModel:
         if kwargs:
             for key, value in kwargs.items():
                 if key != "__class__":
+                    if key == 'password' and not is_valid_hash(value):
+                        value = md5(value.encode()).hexdigest()
                     setattr(self, key, value)
             if kwargs.get("created_at", None) and type(self.created_at) is str:
                 self.created_at = datetime.strptime(kwargs["created_at"], time)
@@ -68,8 +72,18 @@ class BaseModel:
         new_dict["__class__"] = self.__class__.__name__
         if "_sa_instance_state" in new_dict:
             del new_dict["_sa_instance_state"]
+        if models.storage_t != 'file' and "password" in new_dict:
+            del new_dict["password"]
         return new_dict
 
     def delete(self):
         """delete the current instance from the storage"""
         models.storage.delete(self)
+
+
+def is_valid_hash(password):
+    """check valid md5 password"""
+    if re.match(r'(?i)(?<![a-z0-9])[a-f0-9]{32}(?![a-z0-9])', password):
+        return True
+    else:
+        return False
