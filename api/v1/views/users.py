@@ -34,7 +34,7 @@ def delete_users(user_id):
         abort(404)
     user.delete()
     storage.save()
-    return jsonify({})
+    return jsonify({}), 200
 
 
 @app_views.route('/users', methods=['POST'], strict_slashes=False)
@@ -72,4 +72,4 @@ def update_user(user_id):
     user_dict = user.to_dict()
     user_dict.update(dc)
     user.save()
-    return jsonify(user_dict)
+    return jsonify(user_dict), 200
