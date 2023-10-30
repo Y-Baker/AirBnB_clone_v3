@@ -81,8 +81,3 @@ class FileStorage:
         """A method to count the number of objects in storage"""
         objects = self.all(cls)
         return len(objects)
-
-    def get_places_by_city_id(self, city_id):
-        """method to reterive places by city id"""
-        return list(filter(lambda place: place.city_id == city_id,
-                           self.all(Place)))
