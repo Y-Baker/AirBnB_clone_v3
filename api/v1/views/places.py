@@ -89,8 +89,8 @@ def update_place(place_id):
 def search_place():
     """retrieves all Place objects depending of the JSON request"""
     data = request.get_json()
-    if not data:
-        return jsonify({"err": "Not a JSON"}), 400
+    if data is None:
+        abort(400, 'Not a JSON')
     states = [storage.get(State, id) for id in data.get('states', [])]
     cities = [storage.get(City, id) for id in data.get('cities', [])]
     amenities = [storage.get(Amenity, id) for id in data.get('amenities', [])]
@@ -120,7 +120,10 @@ def search_place():
             places = [place for place in storage.all(Place).values()]
 
         for place in places:
-            if amenities not in place.amenities:
-                places.remove(place)
+            for amenity in amenities:
+                print(type(place.amenities))
+                if amenity not in place.amenities:
+                    if place in places:
+                        places.remove(place)
 
     return jsonify([place.to_dict() for place in places])
