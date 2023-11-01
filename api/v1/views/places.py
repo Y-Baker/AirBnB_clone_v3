@@ -116,14 +116,8 @@ def search_place():
         places.extend([place for place in city.places])
 
     if amenities != []:
-        if places == [] and storage.all(Place):
-            places = [place for place in storage.all(Place).values()]
-
         for place in places:
-            for amenity in amenities:
-                print(type(place.amenities))
-                if amenity not in place.amenities:
-                    if place in places:
-                        places.remove(place)
+            if amenities not in place.amenities:
+                places.remove(place)
 
     return jsonify([place.to_dict() for place in places])
